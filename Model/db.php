@@ -9,7 +9,6 @@ class RECEIPT
     {
         try
         {
-
             $this->bdd = new PDO('mysql:host=localhost;dbname=receipt;charset=utf8', 'root', '');
             $this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         }

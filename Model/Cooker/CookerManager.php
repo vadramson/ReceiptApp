@@ -44,7 +44,8 @@ class CookerManager
     // Method new user login 
     public function login($receiptAppData) 
     {
-            $q = $this->_db->query(" SELECT * FROM cookers WHERE (email ='" . $receiptAppData->getEmail() . "' && password ='" . $receiptAppData->getPassword() . "') && status = 'Active'  ") or die(mysql_error());        
+        echo 'Enterd';
+            $q = $this->_db->query(" SELECT * FROM cookers WHERE (email ='" . $receiptAppData->getEmail() . "' AND password ='" . $receiptAppData->getPassword() . "') AND status = 'Active'  ") or die(mysql_error());        
             $reqt = $q->fetch();
              if ($reqt == NULL) 
              {
@@ -53,6 +54,9 @@ class CookerManager
              else
              {
                  // Create user session and Redirect user to homepage
+                  $_SESSION["cookerId"] = $reqt["cookerId"];
+                  $_SESSION["name"] = $reqt["name"];                                  
+                  $_SESSION["picture"] = $reqt["picture"];                                  
              }
      
     }

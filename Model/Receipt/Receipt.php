@@ -9,6 +9,7 @@ class Receipts
     private $duration;
     private $description;
     private $guest;
+    private $receipt_status;
     private $image;
     
     
@@ -73,8 +74,15 @@ class Receipts
         $this->image = $image;
     }
 
-    
-                    
+    function getReceipt_status() {
+        return $this->receipt_status;
+    }
+
+    function setReceipt_status($receipt_status) {
+        $this->receipt_status = $receipt_status;
+    }
+
+                        
     public function hydrate(array $data) 
     {
         if (isset($data['receiptsId'])) 
