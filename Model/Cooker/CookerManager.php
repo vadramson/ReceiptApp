@@ -15,6 +15,7 @@ class CookerManager
         $this->_db = $db;
     }
 
+       
     // Method new user Signup 
     
     function sign_up($receiptAppData) 
@@ -32,19 +33,34 @@ class CookerManager
             $q->bindValue(':password', $receiptAppData->getPassword());                   
             $q->bindValue(':picture', $receiptAppData->getPicture());                   
             $q->execute();     
-
+            
             echo"<script language='javascript'>alert(' Signup Successful! \n You can now login into your account')</script>";       
+            
+            $q = $this->_db->query(" SELECT * FROM cookers WHERE (email ='" . $receiptAppData->getEmail() . "' AND password ='" . $receiptAppData->getPassword() . "') AND status = 'Active'  ") or die(mysql_error());        
+            $reqt = $q->fetch();
+
+            $_SESSION["cookerId"] = $reqt["cookerId"];
+            $_SESSION["name"] = $reqt["name"];                                  
+            $_SESSION["picture"] = $reqt["picture"];               
+             ?>
+            <script>
+                setTimeout(function ()
+                {
+                    window.location.href = "index.php";
+                }, 5);
+            </script>
+        <?php            
         }
         else
         {
             echo"<script language='javascript'>alert(' Email or Password Exists Already! \n Try ausing a different one ')</script>";       
         }
     }
+    
         
     // Method new user login 
     public function login($receiptAppData) 
-    {
-        echo 'Enterd';
+    {        
             $q = $this->_db->query(" SELECT * FROM cookers WHERE (email ='" . $receiptAppData->getEmail() . "' AND password ='" . $receiptAppData->getPassword() . "') AND status = 'Active'  ") or die(mysql_error());        
             $reqt = $q->fetch();
              if ($reqt == NULL) 

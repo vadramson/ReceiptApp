@@ -19,15 +19,26 @@ class IngredientManager
     
     function add_ingredient($receiptAppData) 
     {
-        $q = $this->_db->prepare("INSERT INTO ingredient SET receiptsId = :receiptsId, cookerId = :cookerId, name = :name, quantity = :quantity") or die(mysql_error());
+        $q = $this->_db->prepare("INSERT INTO ingredient SET receiptsId = :receiptsId, cookerId = :cookerId, name = :name, unit = :unit, quantity = :quantity") or die(mysql_error());
         
         $q->bindValue(':receiptsId', $receiptAppData->getReceiptsId());
         $q->bindValue(':cookerId', $receiptAppData->getCookerId());
         $q->bindValue(':name', $receiptAppData->getName());                      
+        $q->bindValue(':unit', $receiptAppData->getUnit());                      
         $q->bindValue(':quantity', $receiptAppData->getQuantity());            
         $q->execute();     
 
          echo"<script language='javascript'>alert(' New Ingredient Added Successfuly!')</script>";       
+         ?>
+        <script>
+            setTimeout(function ()
+            {
+                var link = window.location.href;
+                link = String(link);
+                window.location.href = link;
+            }, 5);
+        </script>
+        <?php
     }
         
     

@@ -8,6 +8,7 @@ class Ingredient
     private $cookerId;
     private $name;
     private $quantity;
+    private $unit;
     
     
     public function __construct(array $data) 
@@ -55,7 +56,15 @@ class Ingredient
         $this->quantity = $quantity;
     }
 
-        
+    function getUnit() {
+        return $this->unit;
+    }
+
+    function setUnit($unit) {
+        $this->unit = $unit;
+    }
+
+    
                     
     public function hydrate(array $data) 
     {
@@ -82,6 +91,11 @@ class Ingredient
         if (isset($data['quantity'])) 
         {
             $this->setQuantity($data['quantity']);
+        }
+        
+        if (isset($data['unit'])) 
+        {
+            $this->setUnit($data['unit']);
         }
                 
                 

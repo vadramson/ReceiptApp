@@ -1,9 +1,3 @@
-<?php
-    function clean($input)
-    {
-        return addslashes(trim($input));
-    }
-?>
 
 <!--Receipt Modal Starts-->
 <div class="modal fade" id="addReceipt-modal" tabindex="-1" role="dialog" aria-labelledby="Add Receipt" aria-hidden="true">
@@ -135,6 +129,64 @@
 </div>
 <!--Login Modal Ends-->
 
+<!--Add Ingredient Modal Starts-->
+<?php
+    if(isset($_SESSION["cookerId"])){
+        $bdd = new RECEIPT();
+        $resulReceipts = $bdd->bdd->query(" SELECT * FROM receipts WHERE receipt_status = 'Active' AND cookerId = '".$cookerId."' ORDER BY receiptsId DESC ") or die(mysql_error());
+    ?>    
+<div class="modal fade" id="addIngredient-modal" tabindex="-1" role="dialog" aria-labelledby="Add Ingredient" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="Login">Add Ingredient</h4>
+            </div>
+            <div class="modal-body">                
+                <form action="#" method="POST">                    
+                    <div class="row">                        
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-6">
+                                <label>Receipt</label>
+                                <select name="receiptsId" required class="form-control">
+                                    <?php
+                                        while ($req = $resulReceipts->fetch()) {
+                                    ?>
+                                    <option value="<?php echo $req['receiptsId'];?>"><?php echo $req['name'];?></option>
+                                    <?php
+                                        }
+                                    ?>
+                                </select>    
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label>Ingredient</label>
+                                <input type="text" name="name" required class="form-control" id="name" placeholder="Name of ingrdient">                        
+                            </div>                            
+                        </div>                         
+                        <div class="col-sm-12">                            
+                            <div class="form-group col-sm-6">
+                                <label>Quantity</label>
+                                <input type="number"  name="quantity" required min="0" class="form-control" id="quantity" placeholder="Quantity">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label>Unit of Measurement</label>
+                                <input type="text" name="unit" required class="form-control" id="name" placeholder="e.g Kg, g, spoon, cup, packet">                        
+                            </div>
+                        </div>                        
+                    </div>                    
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="submit" name="addIngredient"><i class="fa fa-save"></i> Add Ingredient</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+ }
+?>
+<!--Add Ingredient Modal Ends-->
+
 
 
 <!--Modal Treatment Starts-->
@@ -215,6 +267,23 @@ if (isset($_POST['login'])) {
     header("Location:index.php");   
 }
 //User Login Ends Here
+
+//Add Ingredient Starts Here
+if (isset($_POST['addIngredient'])) {
+    $bdd = new RECEIPT();
+
+    $rem = new IngredientManager($bdd->bdd);
+    $receipApp = new Ingredient(array(                        
+        'cookerId' => $cookerId,
+        'quantity' => clean($_POST['quantity']),
+        'unit' => clean($_POST['unit']),
+        'name' => clean($_POST['name']),
+        'receiptsId' => clean($_POST['receiptsId']),                        
+    ));            
+    $rem->add_ingredient($receipApp);        
+    
+}
+//Add Ingredient Ends Here
 
 ?>
 <!--Modal Treatment Ends-->
